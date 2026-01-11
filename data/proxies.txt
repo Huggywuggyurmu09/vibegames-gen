@@ -1,1 +1,5 @@
-# replace with ur proxies
+# replace with ur proxies ip:port format
+# examples:
+1.6.2.68:7070
+61.6.22.162:1642
+# make sure to remove the comments (the ones with the hashtag) if u want it to work!
