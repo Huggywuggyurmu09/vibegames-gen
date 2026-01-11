@@ -26,6 +26,8 @@ https://github.com/user-attachments/assets/9c0765e6-6191-4609-93b7-f92a5215bc91
 - `colorama`
 
 ## proxy format (example)
+```
 1.2.3.4:1080
 5.6.7.8:1080
 9.10.11.12:1080
+```
