@@ -4,6 +4,8 @@ import string
 import threading
 import time
 import os
+import sys
+
 from colorama import init, Fore
 
 init()
@@ -80,7 +82,7 @@ def create_account(proxies, target_accounts, accounts_created, lock, running, pr
                 continue
 
             email = temp_mail['address']
-            print(Fore.GREEN + f"[*] (mail made) " + Fore.LIGHTMAGENTA_EX + f"({email})")
+            print(Fore.GREEN + "[*] (mail made) " + Fore.LIGHTMAGENTA_EX + f"({email})")
 
             password = generate_password()
             country = random.choice(["United Kingdom", "United States"])
@@ -108,19 +110,26 @@ def create_account(proxies, target_accounts, accounts_created, lock, running, pr
                                   data=data,
                                   timeout=15)
 
+            if response.status_code == 429:
+                print(Fore.RED + "[-] (rate limited) 429 - without using proxies, this error is common. use less threads or use proxies")
+                time.sleep(5)
+                continue
+
             if response.status_code == 200:
                 with lock:
                     if accounts_created[0] < target_accounts:
                         accounts_created[0] += 1
                         with open("output/accs.txt", "a") as f:
                             f.write(f"{email}:{password}\n")
-                        print(Fore.CYAN + f"[+] (created) " + Fore.LIGHTMAGENTA_EX + f"({email}:{password})")
+                        print(Fore.CYAN + "[+] (created) " + Fore.LIGHTMAGENTA_EX + f"({email}:{password})")
                     else:
                         running[0] = False
             else:
                 print(Fore.RED + f"[-] (failed) {response.status_code}")
+                print(Fore.YELLOW + f"[DEBUG] Response: {response.text}")
 
-        except:
+        except Exception as e:
+            print(Fore.RED + f"[!] Exception: {e}")
             continue
 
 def main():
@@ -156,6 +165,7 @@ def main():
 
     for i in range(threads_count):
         thread = threading.Thread(target=create_account, args=(proxies, target_accounts, accounts_created, lock, running, proxy_index_counter, use_proxies))
+        thread.daemon = True
         threads.append(thread)
         thread.start()
 
@@ -167,13 +177,14 @@ def main():
                 break
     except KeyboardInterrupt:
         running[0] = False
-        print(Fore.RED + "\nStopping...")
+        print(Fore.RED + "\n🛑 Exiting...")
+        sys.exit(0)
 
     for thread in threads:
         thread.join()
 
     print(Fore.LIGHTGREEN_EX + f"\nCreated {accounts_created[0]} accounts")
-    print(Fore.LIGHTBLUE_EX + f"[*] Saved to output/accs.txt")
+    print(Fore.LIGHTBLUE_EX + "[*] Saved to output/accs.txt")
 
 if __name__ == "__main__":
     os.makedirs("output", exist_ok=True)
