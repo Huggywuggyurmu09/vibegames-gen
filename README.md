@@ -5,10 +5,10 @@ a generator for vibegames.com - a free host
 i am not responsible for what you do with the accounts
 
 ## features
-⚡ accounts made fast  
-⚡ socks5 proxies support  
-⚡ request-based, no browser needed  
-⚡ multi-threaded generation
+- ⚡ accounts made fast
+- ⚡ socks5 proxies support  
+- ⚡ request-based, no browser needed  
+- ⚡ multi-threaded generation
 
 ## usage
 1. install dependencies: `pip install -r requirements.txt`
