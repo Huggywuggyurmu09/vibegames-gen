@@ -1,4 +1,4 @@
-# patched for now - they added cloudflare
+(they removed cloudflare it works now)
 # vibegames-gen
 a generator for vibegames.com - a free host
 
